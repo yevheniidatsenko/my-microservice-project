@@ -1,31 +1,31 @@
 FROM python:3.11-slim
 
-# Встановлюємо робочу директорію
+# Set the working directory
 WORKDIR /app
 
-# Встановлюємо системні залежності
+# Install system dependencies
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Копіюємо requirements та встановлюємо Python залежності
+# Copy requirements and install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копіюємо код проєкту
+# Copy project code
 COPY . .
 
-# Збираємо статичні файли
+# Collect static files
 RUN python manage.py collectstatic --noinput
 
-# Створюємо непривілейованого користувача
+# Create a non-privileged user
 RUN adduser --disabled-password --gecos '' appuser \
     && chown -R appuser:appuser /app
 USER appuser
 
-# Відкриваємо порт
+# Expose the port
 EXPOSE 8000
 
-# Команда для запуску
+# Command to run the application
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "myproject.wsgi:application"]
