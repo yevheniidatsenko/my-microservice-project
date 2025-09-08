@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .status {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .info {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            color: #0d47a1;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #f8f9fa;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ title }}</h1>
+
+        <div class="status">
+            ✅ Django застосунок успішно запущено!<br>
+            🐳 Усі контейнери працюють правильно<br>
+            🗄️ Підключення до PostgreSQL активне<br>
+            🌐 Nginx проксує запити
+        </div>
+
+        <div class="info">
+            <strong>Інформація про проєкт:</strong><br>
+            • Django: Веб-фреймворк для Python<br>
+            • PostgreSQL: Система управління базами даних<br>
+            • Nginx: Веб-сервер та reverse proxy<br>
+            • Docker: Контейнеризація всіх сервісів
+        </div>
+
+        {% if objects %}
+        <h3>Тестові дані з бази:</h3>
+        <ul>
+            {% for obj in objects %}
+            <li>{{ obj.title }} - {{ obj.created_at|date:"d.m.Y H:i" }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="info">
+            Поки що немає тестових даних. Ви можете додати їх через Django Admin панель за адресою <a href="/admin/">/admin/</a>
+        </div>
+        {% endif %}
+
+        <div class="footer">
+            <p>Домашнє завдання до теми «Docker» 🐳</p>
+            <p><a href="/health/">Перевірити статус</a> | <a href="/admin/">Адмін панель</a></p>
+        </div>
+    </div>
+</body>
+</html>
