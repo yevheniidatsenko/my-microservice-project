@@ -1,74 +1,83 @@
 # Terraform Infrastructure as Code
 
-Цей проєкт реалізує базову інфраструктуру AWS за допомогою Terraform для домашнього завдання з теми IaC. Включає налаштування безпечного бекенду, мережевої інфраструктури та реєстру контейнерів.
+This project implements basic AWS infrastructure using Terraform for a homework assignment on the topic of IaC. It includes the setup of a secure backend, network infrastructure, and container registry.
 
 ---
 
-## Структура проєкту
+## Project Structure
 
 ```
-lesson-5/
-│
-├── main.tf                  # Підключення модулів
-├── backend.tf               # Налаштування S3 бекенду з DynamoDB для блокування стейтів
-├── outputs.tf               # Загальні output-и ресурсів
+├── main.tf                  # Module connections
+├── backend.tf               # S3 backend configuration with DynamoDB for state locking
+├── outputs.tf               # General resource outputs
+├── assets                   # Screenshots and other static project files
 │
 ├── modules/
-│   ├── s3-backend/          # Модуль для S3-бакета і DynamoDB таблиці
-│   ├── vpc/                 # Модуль для VPC з публічними і приватними subnet
-│   └── ecr/                 # Модуль для Elastic Container Registry
+│   ├── s3-backend/          # Module for S3 bucket and DynamoDB table
+│   ├── vpc/                 # Module for VPC with public and private subnets
+│   └── ecr/                 # Module for Elastic Container Registry
 │
-└── README.md                # Цей файл
+└── README.md                # This file
 ```
 
 ---
 
-## Опис модулів
+## Module Descriptions
 
-- **s3-backend**: Створює S3 bucket зі ввімкненим версіюванням, шифруванням і блокуванням публічного доступу. DynamoDB таблиця забезпечує блокування Terraform state для уникнення конфліктів при паралельній роботі.
-- **vpc**: Створює приватну мережеву інфраструктуру з VPC, 3 публічними і 3 приватними підмережами, Internet Gateway, NAT Gateway та таблицями маршрутизації.
-- **ecr**: Створює ECR репозиторій для зберігання Docker образів із увімкненим скануванням образів та політиками доступу.
+- **s3-backend**: Creates an S3 bucket with versioning, encryption, and public access blocking enabled. A DynamoDB table ensures Terraform state locking to avoid conflicts during parallel work.
+- **vpc**: Creates a private network infrastructure with a VPC, 3 public and 3 private subnets, an Internet Gateway, a NAT Gateway, and route tables.
+- **ecr**: Creates an ECR repository for storing Docker images with image scanning and access policies enabled.
 
 ---
 
-## Як працювати з проєктом
+## How to Work with the Project
 
-### Ініціалізація проекту (після клонування або зміни конфігурації)
+### Initialize the Project (after cloning or configuration changes)
 
 ```
 terraform init
 ```
 
-### Перевірка конфігурації
+### Validate the Configuration
 
 ```
 terraform validate
 ```
 
-### Перегляд плану створення або змін інфраструктури
+### Preview the Infrastructure Creation or Changes Plan
 
 ```
 terraform plan
 ```
 
-### Створення або оновлення інфраструктури
+### Create or Update the Infrastructure
 
 ```
 terraform apply
 ```
 
-Terraform запропонує підтвердити виконання, введіть `yes`.
+Terraform will prompt for confirmation; type `yes`.
 
 ---
 
-## Видалення інфраструктури
+## Destroy the Infrastructure
 
-Щоб уникнути небажаних витрат, після завершення роботи видаліть створені ресурси:
+To avoid unnecessary costs, delete the created resources after completing your work:
 
 ```
 terraform destroy
 ```
 
-**Увага:** під час `destroy` буде видалено всі ресурси, включно з бакетом S3 та таблицею DynamoDB, які зберігають стан Terraform. Якщо видалити їх раніше, небажано буде продовжувати роботу з цим проектом без переналаштування бекенду.
+**Note:** During `destroy`, all resources will be deleted, including the S3 bucket and DynamoDB table that store the Terraform state. If these are deleted beforehand, it is not recommended to continue working with this project without reconfiguring the backend.
 
 ---
+
+# Terraform Project Execution: Screenshots and Results
+
+![SCR](assets/SCR_1.png)
+![SCR](assets/SCR_2.png)
+![SCR](assets/SCR_3.png)
+![SCR](assets/SCR_4.png)
+![SCR](assets/SCR_5.png)
+![SCR](assets/SCR_6.png)
+![SCR](assets/SCR_7.png)
