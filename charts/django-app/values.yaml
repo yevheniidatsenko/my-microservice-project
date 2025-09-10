@@ -12,7 +12,7 @@ service:
 
 config:
   DEBUG: "False"
-  ALLOWED_HOSTS: "10.0.4.58,10.0.6.182,localhost,127.0.0.1"
+  ALLOWED_HOSTS: "localhost,127.0.0.1,django,10.0.6.182,10.0.4.58,*"
   SECRET_KEY: "django-production-key-change-this"
   POSTGRES_DB: "myproject"
   POSTGRES_USER: "postgres"
