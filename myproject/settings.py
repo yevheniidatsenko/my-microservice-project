@@ -10,7 +10,9 @@ SECRET_KEY = 'django-insecure-your-secret-key-here-change-in-production'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'django']
+# Гнучкі ALLOWED_HOSTS через змінну оточення
+allowed_hosts_env = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,django,*')
+ALLOWED_HOSTS = allowed_hosts_env.split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -53,15 +55,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
-# Database
+# Гнучке налаштування бази даних залежно від оточення
+if os.getenv('DJANGO_ENV') == 'local':
+    POSTGRES_HOST = 'localhost'
+else:
+    POSTGRES_HOST = os.getenv('POSTGRES_HOST', 'db')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'django_db'),
-        'USER': os.environ.get('POSTGRES_USER', 'django_user'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'django_password'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'db'),
-        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+        'NAME': os.getenv('POSTGRES_DB', 'django_db'),
+        'USER': os.getenv('POSTGRES_USER', 'django_user'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'django_password'),
+        'HOST': POSTGRES_HOST,
+        'PORT': os.getenv('POSTGRES_PORT', '5432'),
     }
 }
 
