@@ -33,6 +33,9 @@ resources:
     cpu: 250m
     memory: 256Mi
 
+imagePullSecrets:
+  - ecr-creds
+
 nodeSelector: {}
 tolerations: []
 affinity: {}
