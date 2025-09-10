@@ -1,6 +1,9 @@
+import logging
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import TestModel
+
+logger = logging.getLogger(__name__)
 
 def home(request):
     """Головна сторінка"""
@@ -22,6 +25,7 @@ def health_check(request):
             'objects_count': count
         })
     except Exception as e:
+        logger.error('Health check error', exc_info=True)
         return JsonResponse({
             'status': 'error',
             'database': 'disconnected',
