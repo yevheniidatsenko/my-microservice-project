@@ -34,7 +34,7 @@ spec:
     REPO_URL     = "https://github.com/yevheniidatsenko/my-microservice-project.git"
     APP_BRANCH   = "lesson-4"     // Django + Dockerfile
     CHART_BRANCH = "lesson-7"     // Helm chart гілка
-    CHART_PATH   = "lesson-5/charts/django-app" 
+    CHART_PATH   = "charts/django-app" 
 
     COMMIT_EMAIL = "jenkins@localhost"
     COMMIT_NAME  = "jenkins"
