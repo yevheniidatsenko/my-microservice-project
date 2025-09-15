@@ -26,7 +26,7 @@ spec:
   environment {
     // AWS / ECR
     AWS_REGION   = "us-west-2"
-    ECR_REGISTRY = "065915236794.dkr.ecr.us-west-2.amazonaws.com"
+    ECR_REGISTRY = "474876695240.dkr.ecr.us-west-2.amazonaws.com"
     IMAGE_NAME   = "lesson-9-django-ecr"
     IMAGE_TAG    = "v1.0.${BUILD_NUMBER}"
 
