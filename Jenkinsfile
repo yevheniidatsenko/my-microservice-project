@@ -49,7 +49,7 @@ spec:
             set -eux
             rm -rf app-src
             git clone --depth 1 --branch "$APP_BRANCH" "$REPO_URL" app-src
-            test -f app-src/django-docker-project/Dockerfile
+            test -f app-src/Dockerfile
           '''
         }
       }
