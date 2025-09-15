@@ -1,6 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
-metadata:
+meta
   name: {{ include "django-app.fullname" . }}
   labels:
     {{- include "django-app.labels" . | nindent 4 }}
