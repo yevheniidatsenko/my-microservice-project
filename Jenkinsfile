@@ -69,8 +69,8 @@ spec:
               sh '''
                 set -eux
                 /kaniko/executor \
-                  --context `pwd`/app-src/django-docker-project \
-                  --dockerfile `pwd`/app-src/django-docker-project/Dockerfile \
+                  --context `pwd`/app-src \
+                  --dockerfile `pwd`/app-src/Dockerfile \
                   --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
                   --destination=$ECR_REGISTRY/$IMAGE_NAME:latest \
                   --cache=true
