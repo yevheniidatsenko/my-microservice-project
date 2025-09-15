@@ -1,49 +1,39 @@
 # S3 Backend Outputs
 output "s3_bucket_name" {
-    description = "Name of the S3 bucket for Terraform state"
-    value       = module.s3_backend.bucket_name  # <-- Виправлено назву
-}
-
-output "s3_bucket_arn" {
-    description = "ARN of the S3 bucket"
-    value       = module.s3_backend.bucket_arn
+  description = "Name of the S3 bucket for Terraform state"
+  value       = module.s3_backend.s3_bucket_name
 }
 
 output "dynamodb_table_name" {
-    description = "Name of the DynamoDB table for state locking"
-    value       = module.s3_backend.dynamodb_table_name
-}
-
-output "dynamodb_table_arn" {
-    description = "ARN of the DynamoDB table"
-    value       = module.s3_backend.dynamodb_table_arn
+  description = "Name of the DynamoDB table for state locking"
+  value       = module.s3_backend.dynamodb_table_name
 }
 
 # VPC Outputs
 output "vpc_id" {
-        description = "ID of the VPC"
-        value       = module.vpc.vpc_id
+  description = "ID of the VPC"
+  value       = module.vpc.vpc_id
 }
 
 output "public_subnet_ids" {
-        description = "IDs of the public subnets"
-        value       = module.vpc.public_subnet_ids
+  description = "IDs of the public subnets"
+  value       = module.vpc.public_subnet_ids
 }
 
 output "private_subnet_ids" {
-        description = "IDs of the private subnets"
-        value       = module.vpc.private_subnet_ids
+  description = "IDs of the private subnets"
+  value       = module.vpc.private_subnet_ids
 }
 
 # ECR Outputs
 output "ecr_repository_url" {
-    description = "URL of the ECR repository"
-    value       = module.ecr.ecr_repository_url
+  description = "URL of the ECR repository"
+  value       = module.ecr.ecr_repository_url
 }
 
 output "ecr_repository_name" {
-    description = "Name of the ECR repository"
-    value       = module.ecr.ecr_repository_name
+  description = "Name of the ECR repository"
+  value       = module.ecr.ecr_repository_name
 }
 
 # EKS Outputs
@@ -65,4 +55,38 @@ output "eks_cluster_version" {
 output "eks_cluster_arn" {
   description = "The Amazon Resource Name (ARN) of the cluster"
   value       = module.eks.cluster_arn
+}
+
+# Jenkins Outputs
+output "jenkins_url" {
+  description = "Jenkins LoadBalancer URL"
+  value       = module.jenkins.jenkins_url
+}
+
+output "jenkins_admin_user" {
+  description = "Jenkins admin username"
+  value       = module.jenkins.jenkins_admin_user
+}
+
+output "jenkins_admin_password" {
+  description = "Jenkins admin password"
+  value       = module.jenkins.jenkins_admin_password
+  sensitive   = true
+}
+
+# Argo CD Outputs
+output "argocd_server_url" {
+  description = "URL to access Argo CD server"
+  value       = module.argocd.argocd_server_url
+}
+
+output "argocd_external_url" {
+  description = "External URL to access Argo CD server (LoadBalancer)"
+  value       = module.argocd.argocd_external_url
+}
+
+output "argocd_admin_password" {
+  description = "Argo CD admin password"
+  value       = module.argocd.argocd_admin_password
+  sensitive   = true
 }
