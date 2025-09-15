@@ -59,7 +59,7 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 if os.getenv('DJANGO_ENV') == 'local':
     POSTGRES_HOST = 'localhost'
 else:
-    POSTGRES_HOST = os.getenv('POSTGRES_HOST', 'db')
+    POSTGRES_HOST = os.getenv('DB_HOST', 'postgres-service')
 
 DATABASES = {
     'default': {
@@ -67,10 +67,11 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB', 'myproject'),
         'USER': os.getenv('POSTGRES_USER', 'postgres'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'HOST': POSTGRES_HOST,
         'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
