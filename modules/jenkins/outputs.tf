@@ -1,6 +1,6 @@
 output "jenkins_url" {
-  description = "Jenkins LoadBalancer URL"
-  value       = "http://${data.kubernetes_service.jenkins.status.0.load_balancer.0.ingress.0.hostname}:8080"
+  value = (try(length(data.kubernetes_service.jenkins.status[0].load_balancer), 0) > 0 && try(length(data.kubernetes_service.jenkins.status[0].load_balancer[0].ingress), 0) > 0
+  ) ? "http://${data.kubernetes_service.jenkins.status[0].load_balancer[0].ingress[0].hostname}:8080" : "LoadBalancer IP not assigned yet"
 }
 
 output "jenkins_admin_user" {

@@ -27,7 +27,7 @@ resource "helm_release" "jenkins" {
   name       = "jenkins"
   repository = "https://charts.jenkins.io"
   chart      = "jenkins"
-  version    = "4.8.3"
+  version    = "5.8.89"
   namespace  = kubernetes_namespace.jenkins.metadata[0].name
 
   timeout = 1200  
@@ -48,13 +48,18 @@ resource "helm_release" "jenkins" {
   }
 
   set {
-    name  = "persistence.storageClass"
+    name  = "controller.persistence.storageClass"
     value = var.storage_class
   }
 
   set {
-    name  = "persistence.size"
+    name  = "controller.persistence.size"
     value = var.storage_size
+  }
+
+  set {
+    name  = "controller.service.serviceType"
+   value = "LoadBalancer"
   }
 
   depends_on = [kubernetes_namespace.jenkins, kubernetes_secret.aws_credentials]
