@@ -1,107 +1,109 @@
-# Django + PostgreSQL on Kubernetes with Helm & Terraform
+# CI/CD Pipeline with Jenkins, Terraform, Helm, and Argo CD
 
-## Project Overview
-This project demonstrates deploying a Django application connected to PostgreSQL on a Kubernetes cluster managed via Terraform and Helm. The app is containerized with Docker, images are hosted in Amazon ECR, and Kubernetes cluster autoscaling is configured.
+## Overview
 
----
+This project demonstrates a full CI/CD pipeline integrating Jenkins, Terraform, Helm, and Argo CD on AWS.
 
-## Architecture
-- Kubernetes cluster created by Terraform in existing VPC.
-- Amazon ECR stores Docker images.
-- Django app deployed via Helm chart with:
-  - Deployment using image from ECR.
-  - LoadBalancer service for external access.
-  - ConfigMap for environment variables.
-  - Horizontal Pod Autoscaler (HPA) scaling pods between 2-6 replicas based on CPU usage.
+The pipeline automates:
 
----
+- Building Docker images for a Django application with Jenkins
+- Pushing built images to Amazon ECR
+- Updating Helm chart with new image tags in a Git repository
+- Deploying and synchronizing the application on an Amazon EKS cluster via Argo CD
 
-## Prerequisites
-- AWS account with Terraform configured.
-- kubectl and Helm installed locally.
-- Docker installed to build images.
-- AWS CLI configured for authentication with ECR.
+This practical task shows modern DevOps workflows for rapid, reliable, and repeatable production deployments.
 
----
+***
 
-## Setup and Deployment Instructions
+## How to Apply Terraform
 
-### 1. Create AWS Infrastructure
-Apply Terraform scripts under `lesson-7/modules/` to create:
-- Kubernetes cluster (EKS) in appropriate VPC subnet.
-- ECR repository for Docker images.
+1. Clone the repository and switch to branch `lesson-8-9`:
 
-### 2. Build and Push Docker Image
-Build image with platform linux/amd64 support and push to ECR:
-
-```
-docker buildx build --platform linux/amd64 -t lesson-5-ecr:v1.0.16 --load .
-docker tag lesson-5-ecr:v1.0.16 <aws_account_id>.dkr.ecr.<region>.amazonaws.com/lesson-5-ecr:v1.0.16
-aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.<region>.amazonaws.com
-docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/lesson-5-ecr:v1.0.16
+```bash
+git clone <repository-url>
+cd <project-folder>
+git checkout lesson-8-9
 ```
 
-### 3. Configure Helm Chart Values
-Edit `charts/django-app/values.yaml`:
+2. Initialize Terraform and apply the configuration:
 
-```
-image:
-  repository: <aws_account_id>.dkr.ecr.<region>.amazonaws.com/lesson-5-ecr
-  tag: v1.0.16
-  pullPolicy: Always
-
-config:
-  DB_HOST: "postgres-service"
-  DB_PORT: "5432"
-  POSTGRES_USER: "postgres"
-  POSTGRES_PASSWORD: "postgres"
-  POSTGRES_DB: "myproject"
-
-service:
-  type: LoadBalancer
-  port: 80
-
-autoscaling:
-  enabled: true
-  minReplicas: 2
-  maxReplicas: 6
-  targetCPUUtilizationPercentage: 70
+```bash
+terraform init
+terraform apply
 ```
 
-### 4. Deploy Application with Helm
+> **Important:** Remember to destroy resources when done to avoid unwanted AWS costs:
 
-```
-helm upgrade django-app ./charts/django-app -f ./charts/django-app/values.yaml
-kubectl rollout restart deployment django-app
-```
-
-### 5. Run Database Migrations
-
-Run migrations to create necessary tables:
-
-```
-kubectl run django-migrate --rm -it --restart=Never \
-  --image=<aws_account_id>.dkr.ecr.<region>.amazonaws.com/lesson-5-ecr:v1.0.16 \
-  --env="DB_HOST=postgres-service" \
-  --env="DB_PORT=5432" \
-  --env="POSTGRES_USER=postgres" \
-  --env="POSTGRES_PASSWORD=postgres" \
-  --env="POSTGRES_DB=myproject" \
-  -- python manage.py migrate
+```bash
+terraform destroy
 ```
 
----
+***
 
-## Verification
+## How to Check Jenkins Job
 
-- Pods status: `kubectl get pods` shows all running with no restarts.
-- Accessible app via LoadBalancer IP.
-- Health check endpoint `/health/` returns success.
-- Auto-scaling scales pods based on CPU load (2-6 replicas as configured).
+1. Access Jenkins UI (URL and admin password output by Terraform module).
 
-# Project Execution: Screenshots and Results
+2. Locate and run the pipeline job that performs:
 
-![SCR](assets/SCR_1.png)
-![SCR](assets/SCR_2.png)
-![SCR](assets/SCR_3.png)
-![SCR](assets/SCR_4.png)
+   - Building Docker image using Kaniko
+   - Pushing image to ECR
+   - Updating Helm charts with new image tag
+   - Pushing updated Helm chart to Git repo
+
+3. Monitor stages and logs for successful execution.
+
+***
+
+## How to See Results in Argo CD
+
+1. Access Argo CD UI (URL and initial admin password output by Terraform).
+
+2. Check that the Application is synced and healthy.
+
+3. Confirm that new pods are running in the EKS cluster:
+
+```bash
+kubectl -n <app-namespace> get pods
+```
+
+4. Verify your Django application is working as expected.
+
+***
+
+## Project Structure
+
+```
+- `assets/` — images and resources for documentation  
+- `backend.tf` — Terraform backend configuration (S3 + DynamoDB)  
+- `charts/django-app/` — Helm chart for Django application  
+- `django-docker-project/` — Django application source code with nginx and static files  
+- `Jenkinsfile` — Jenkins pipeline configuration  
+- `main.tf` — main Terraform file to connect modules  
+- `modules/` — Terraform modules for different services:
+  - `argo_cd/` — Argo CD installation via Helm
+  - `ecr/` — ECR repository creation
+  - `eks/` — EKS cluster setup
+  - `jenkins/` — Jenkins installation via Helm
+  - `s3-backend/` — S3 and DynamoDB for Terraform state
+  - `vpc/` — VPC setup, subnets, routing  
+- `outputs.tf` — Terraform resource outputs  
+- `README.md` — project documentation  
+- `variables.tf` — Terraform variables   
+```
+
+***
+
+## Notes
+
+- Automate migrations inside CI/CD or Kubernetes to avoid DB schema issues.
+- Scale EKS nodes and allocate resources appropriately.
+- Clean up all created AWS resources after testing to minimize costs.
+- Use Terraform output commands for quick resource info.
+
+## Results
+
+![SCR](./assets/SCR_1.png)
+![SCR](./assets/SCR_2.png)
+![SCR](./assets/SCR_3.png)
+![SCR](./assets/SCR_4.png)
