@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: 474876695240.dkr.ecr.us-west-2.amazonaws.com/final-devops-django-ecr
-  tag: v1.0.9
+  tag: v1.0.12
   pullPolicy: Always
 
 service:
