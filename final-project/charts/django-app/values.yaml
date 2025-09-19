@@ -1,7 +1,7 @@
 replicaCount: 2
 
 image:
-  repository: 474876695240.dkr.ecr.us-west-2.amazonaws.com/lesson-5-ecr
+  repository: 474876695240.dkr.ecr.us-west-2.amazonaws.com/final-devops-django-ecr
   tag: v1.0.9
   pullPolicy: Always
 
