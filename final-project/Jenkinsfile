@@ -73,7 +73,7 @@ spec:
               --dockerfile `pwd`/app-src/final-project/django-app/Dockerfile \
               --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
               --destination=$ECR_REGISTRY/$IMAGE_NAME:latest \
-              --cache=true
+              --cache=false
               '''
             }
           }
