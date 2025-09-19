@@ -8,7 +8,7 @@ metadata:
   labels:
     app: jenkins-kaniko
 spec:
-  serviceAccountName: jenkins
+  serviceAccountName: jenkins-admin
   containers:
     - name: kaniko
       image: gcr.io/kaniko-project/executor:v1.16.0-debug
@@ -34,7 +34,7 @@ spec:
     REPO_URL     = "https://github.com/yevheniidatsenko/my-microservice-project.git"
     APP_BRANCH   = "final-project"     // Django + Dockerfile
     CHART_BRANCH = "final-project"     // Helm chart гілка
-    CHART_PATH   = "final-project/charts/django-app" 
+    CHART_PATH   = "final-project/charts/django-app"
 
     COMMIT_EMAIL = "jenkins@localhost"
     COMMIT_NAME  = "jenkins"
@@ -49,7 +49,7 @@ spec:
             set -eux
             rm -rf app-src
             git clone --depth 1 --branch "$APP_BRANCH" "$REPO_URL" app-src
-            test -f app-src/Dockerfile
+            test -f app-src/final-project/django-app/Dockerfile
           '''
         }
       }
@@ -69,11 +69,11 @@ spec:
               sh '''
                 set -eux
                 /kaniko/executor \
-                  --context `pwd`/app-src \
-                  --dockerfile `pwd`/app-src/Dockerfile \
-                  --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
-                  --destination=$ECR_REGISTRY/$IMAGE_NAME:latest \
-                  --cache=true
+              --context `pwd`/app-src/final-project/django-app \
+              --dockerfile `pwd`/app-src/final-project/django-app/Dockerfile \
+              --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
+              --destination=$ECR_REGISTRY/$IMAGE_NAME:latest \
+              --cache=true
               '''
             }
           }
@@ -88,7 +88,7 @@ spec:
             sh '''
               set -eux
               rm -rf chart-repo
-              git clone --branch "$CHART_BRANCH" https://$GIT_USER:$GIT_PAT@github.com/yevheniidatsenko/my-microservice-project.git chart-repo
+              git clone --branch "$CHART_BRANCH" https://$GIT_USER:$GIT_PAT@github.com/LesiaUKR/my-microservice-project.git chart-repo
               cd chart-repo/$CHART_PATH
 
               # надійна заміна "tag:" (байдуже скільки пробілів)
