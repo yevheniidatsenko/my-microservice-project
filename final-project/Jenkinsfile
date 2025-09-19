@@ -88,7 +88,7 @@ spec:
             sh '''
               set -eux
               rm -rf chart-repo
-              git clone --branch "$CHART_BRANCH" https://$GIT_USER:$GIT_PAT@github.com/LesiaUKR/my-microservice-project.git chart-repo
+              git clone --branch "$CHART_BRANCH" https://$GIT_USER:$GIT_PAT@github.com/yevheniidatsenko/my-microservice-project.git chart-repo
               cd chart-repo/$CHART_PATH
 
               # надійна заміна "tag:" (байдуже скільки пробілів)
