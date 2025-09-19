@@ -90,3 +90,20 @@ output "argocd_admin_password" {
   value       = module.argocd.argocd_admin_password
   sensitive   = true
 }
+
+# General Information Outputs
+output "kubectl_config_command" {
+  description = "Command to configure kubectl"
+  value       = "aws eks --region ${var.aws_region} update-kubeconfig --name ${module.eks.cluster_name}"
+}
+
+output "project_summary" {
+  description = "Summary of deployed resources"
+  value = {
+    project_name = var.project_name
+    environment  = var.environment
+    region       = var.aws_region
+    cluster_name = module.eks.cluster_name
+    ecr_url      = module.ecr.ecr_repository_url
+  }
+}

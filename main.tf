@@ -202,3 +202,16 @@ module "rds" {
 
   depends_on = [module.vpc]
 }
+
+module "monitoring" {
+  source = "./modules/monitoring"
+  
+  cluster_name                       = module.eks.cluster_name
+  cluster_endpoint                   = module.eks.cluster_endpoint
+  cluster_certificate_authority_data = module.eks.cluster_certificate_authority_data
+  namespace                          = "monitoring"
+  grafana_admin_password             = var.grafana_admin_password
+  environment                        = var.environment
+  
+  depends_on = [module.eks]
+}
