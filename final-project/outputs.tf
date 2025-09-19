@@ -77,21 +77,54 @@ output "jenkins_admin_password" {
 # Argo CD Outputs
 output "argocd_server_url" {
   description = "URL to access Argo CD server"
-  value       = module.argocd.argocd_server_url
+  value       = module.argo_cd.argocd_server_url
 }
 
 output "argocd_external_url" {
   description = "External URL to access Argo CD server (LoadBalancer)"
-  value       = module.argocd.argocd_external_url
+  value       = module.argo_cd.argocd_external_url
 }
 
 output "argocd_admin_password" {
   description = "Argo CD admin password"
-  value       = module.argocd.argocd_admin_password
+  value       = module.argo_cd.argocd_admin_password
   sensitive   = true
 }
 
-# General Information Outputs
+# RDS Outputs
+output "rds_endpoint" {
+  description = "RDS endpoint"
+  value       = module.rds.rds_endpoint
+}
+
+output "rds_port" {
+  description = "RDS port"
+  value       = module.rds.rds_port
+}
+
+output "database_name" {
+  description = "Database name"
+  value       = module.rds.database_name
+}
+
+# Monitoring Outputs
+output "grafana_external_url" {
+  description = "External URL to access Grafana"
+  value       = module.monitoring.grafana_external_url
+}
+
+output "grafana_admin_password" {
+  description = "Grafana admin password"
+  value       = module.monitoring.grafana_admin_password
+  sensitive   = true
+}
+
+output "prometheus_url" {
+  description = "Prometheus server URL"
+  value       = module.monitoring.prometheus_url
+}
+
+# Загальна інформація
 output "kubectl_config_command" {
   description = "Command to configure kubectl"
   value       = "aws eks --region ${var.aws_region} update-kubeconfig --name ${module.eks.cluster_name}"

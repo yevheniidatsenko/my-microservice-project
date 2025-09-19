@@ -3,8 +3,8 @@
 
 terraform {
   backend "s3" {
-    bucket         = "yevhenii-lesson5"
-    key            = "lesson-5/terraform.tfstate"
+    bucket         = "final-devops-terraform-state-70452f55"
+    key            = "final-project/terraform.tfstate"
     region         = "us-west-2"
     dynamodb_table = "terraform-locks"
     encrypt        = true
